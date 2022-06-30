@@ -1,43 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABXNJREFUWEetl31ME2cYwJ+7Xq+0tEMkfA6QooCgdQwUJiCCLmHaMcRMtmjcpn/gliVOlmyZy9x0bHNzW1SWOIfJdDHTrVtExnAjUZlBkamowIp8TAqk8iHyUVtoe73eLe81dKW99s7E+6u95+v3Ps/zPu97GIh4xmpfUKkSV9eS5EwhRT9ZPTl483RoXPK7pNS0DpnbmPjfGUt/FaGIe5Ek7pVTlKLR3HepJLzkN7OQe0xIAcnHL+zMCY0NvyJGd1Zn0jiWG7a2qlnIRhRA76XTT6sjBi/jOKUQcojkDEPOmOwTWWHpX+iF9EUB6HQ6iXaJtVpODG4XcojkVjr++3q9vLysrMwppC8KADkx7l6fbI5PuspQ9vmBnOKkbEI12Lsydv+5HqHgSC4a4I/3NpUqTNQZMU5nQsiN6z7/pUaMrmiAG8WZithXi05JQoJKAjl2mmy1xh8aNi+va515rACTrQc3qhTUSaFGRA1oniG3hmZWiMqWqAx01322eFEScQHD7DFiVsWysqF/e+m1KcXvdwnpCwI0NzfLM1RX69EQ8nY28kAKDhqDuCjKJw4aRjfNK7U5OTnWQBABAViWxWh95ccSKfaBtxOjkYED511vdxXgbGKCb0M7HewnxJI9H2IYxvqDCAgw2l6zIUza8yNf3du7nHDksstvcRoJ2hzGJwbqh3FH8pbIZaVnHxmgq/ZQSlIKddG77g4bQFOHE5oGZDA8ZeP8hkgBkqJlsDbFCeoFc0OhfujtJtcsLtnVzQfBmwF0+MgWFNUr5ROrPI1mLBhUX8Cha8zOvSYJHEgJDhY77VYrzlCBNmNu2S3W+U32gQYt3+HED9B0uDws4uF33sRnmzH4s9PBBd6UqQBNjAtkwsyyv7YC1jdJQ7gch8otuM9ix+8/sSN81VvV3gIfAEPNa/OiFi69IpNZ07yVD5zBoW+CgpRoJVRoXemffVBp2odIiCRtEBvrC2C3yztH7v6Tqy49MeVpNwdgqLUmMyKo81OcYIr46vVNDQP6cYar+Y48HBIX+gYKtOVGR+dvi85/8wQvgPnW8QJ50P36QJOu04DD0Us0UDTDlWF5vAzyEh1sXBRg0qBAoV0yq11Rq9C8Xeq5LbkMoKZTqvNb+NLu7ba7G+CnDsK9A5Ac1X1NsgSyUwEUSr9bnrsntIwvjsrLK3HflDiAtrOHsjWp5hbhNbg0UL17hnH24m0aQyWZfRDIK/kSSIrzDzHSP7U8pujr1lkbDsBQd7BgQbKlUSyApx4ax+euUXD7PsuVBkHsLpH4zcQ0lfGSSqPVzQFgm/M1zlBti9BJFwjw4nWM1bU5uAXtfDYI0hL+nw2ednYqpGFEWfyyWq3mdgNnoNftJRc9FdMohdEcf0GmLRiL5sDCOAJ7JtX38OnsJ6DqvGtrBgJAcrM18mhIevkbbgD0w3T926xg5cNGf1nwnP1ZMRIoSMO47ke2xlEA3Q1gDZM0JlQCpI+a8Y6BWqZZv+euew4MtZzKiwq92+QvA95jmE8Pbc3t2QSkp/oeTN76Az3KQnVxxV9ugOmOM8/LSX1doDqj7v/7DsBNA8PeMzOYyeHSRoMpOToYitKsvFOQz+fsd8MjAXg6am1zwrHrgY9jf4txMKFGeqwuKzi/YdgNwF59LsE5r1Avdif09QN74DzN2W/LJbghJPYZMyW8E5m19as5TYj+TOuP75UTxo/EOmq5QwJto7jgYkYxaj47E/FlvT64cvajZc5hhL6AVifYK8JUQ/vEZkIsLAo+ZlEXRq8ou+Zpw3sfMN06sjk4yHzscUGg4DbL1OvKFftPegPzAqDL6GTbz9oQaW8lRkC62FXy6bE03H7gXLovQrOhlu9y+h+sFS4/NHbcswAAAABJRU5ErkJggg==" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Bonheur+Royale&family=Chelsea+Market&family=Encode+Sans:wght@100;200;300;400;500;600;700;800;900&family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&family=Playball&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Qahiri&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Recursive:wght@300;400;500;600;700;900&family=Righteous&family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500;8..144,600;8..144,700;8..144,800;8..144,900;8..144,1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,400;1,700;1,900&family=Saira+Stencil+One&family=Sen:wght@400;700;800&family=Stick&display=swap" rel="stylesheet">
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+  <title>My Wallet</title>
+</head>
+
+<body>
+  <div class="root"></div>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
+
 </html>
