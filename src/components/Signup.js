@@ -23,7 +23,7 @@ export default function Signup() {
         }        
 
         const promise = axios.post(
-            "http://localhost:5002/signup", body);
+            "http://localhost:5000/signup", body);
 
             promise.then((res) => {
                 navigate("/");
