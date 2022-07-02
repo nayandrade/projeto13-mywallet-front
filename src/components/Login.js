@@ -24,11 +24,12 @@ export default function Login() {
             password: password,
         };
         const promise = axios.post(
-            "http://localhost:5000/signin", body);
+            "https://projeto13mywallet-back.herokuapp.com/signin", body);
 
         
 
         promise.then((res) => {
+            console.log(typeof body.password)
             setToken(res.data.token);
             setName(res.data.name);
             setDisabled(false);
@@ -39,6 +40,7 @@ export default function Login() {
         });
 
         promise.catch((res) => {
+            console.log(typeof body.password)
             console.log(res.message)
             setDisabled(false);
             setLoadingButton(false);

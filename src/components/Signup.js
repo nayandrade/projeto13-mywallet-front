@@ -23,7 +23,7 @@ export default function Signup() {
         }        
 
         const promise = axios.post(
-            "http://localhost:5000/signup", body);
+            "https://projeto13mywallet-back.herokuapp.com/signup", body);
 
             promise.then((res) => {
                 navigate("/");
