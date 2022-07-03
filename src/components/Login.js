@@ -10,7 +10,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [loadingButton, setLoadingButton] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const { token, setToken, setName, name, userId, setUserId } = useContext(UserContext);
+    const { setToken, setName } = useContext(UserContext);
     const navigate = useNavigate();
 
     if(localStorage.getItem('LastUser') !== null) {
@@ -24,7 +24,6 @@ export default function Login() {
             "https://projeto13mywallet-back.herokuapp.com/signin", body);
 
         promise.then((res) => {
-            console.log(typeof body.password)
             setToken(res.data.token);
             setName(res.data.name);
             setDisabled(false);
@@ -32,8 +31,6 @@ export default function Login() {
             setLoadingButton(false);  
         });
         promise.catch((res) => {
-            console.log(typeof body.password)
-            console.log(res.message)
             setDisabled(false);
             setLoadingButton(false);  
         });
@@ -41,7 +38,7 @@ export default function Login() {
 
     function UserLogin(event) {
         event.preventDefault();
-        console.log('logando')
+
         setDisabled(true);
         setLoadingButton(true);
 
@@ -55,10 +52,8 @@ export default function Login() {
         
 
         promise.then((res) => {
-            console.log(res)
             setToken(res.data.token);
             setName(res.data.name);
-            console.log(res.data.userId)
             setDisabled(false);
             localStorage.setItem('Login-Token', res.data.token);
             localStorage.setItem('LastUser',JSON.stringify(body));
@@ -67,8 +62,6 @@ export default function Login() {
         });
 
         promise.catch((res) => {
-            console.log(typeof body.password)
-            console.log(res.message)
             setDisabled(false);
             setLoadingButton(false);
         })   

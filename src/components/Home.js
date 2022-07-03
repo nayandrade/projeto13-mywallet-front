@@ -1,5 +1,7 @@
-import { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import TransactionLi from "./TransactionLi";
+import InputForm from "./InputForm";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import styled from 'styled-components';
@@ -7,15 +9,8 @@ import { ThreeDots } from  'react-loader-spinner';
 import { RiLogoutBoxRLine, RiAddCircleLine } from "react-icons/ri";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 
-
-function TransactionLi ( { transaction } ) {    
-    return (
-        <Li><div><TransactionDate>{transaction.date}</TransactionDate><span>{transaction.description}</span></div><TransactionValue transaction={transaction.value}>{parseFloat(transaction.value).toFixed(2).replace('.', ',').replace('-', '')}</TransactionValue></Li>
-    )
-}
-
 export default function Home() {
-    const { token, setToken, setName, name } = useContext(UserContext);
+    const { token, name } = useContext(UserContext);
     const [transactions, setTransactions] = useState();
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -23,6 +18,8 @@ export default function Home() {
     const [transactionValue, setTransactionValue] = useState();
     const [transactionDescription, setTransactionDescription] = useState('');
     const [loadTransactions, setLoadTransactions] = useState(true);
+    const [loadingButton, setLoadingButton] = useState(false);
+    const [disabled, setDisabled] = useState(false);
     const navigate = useNavigate();  
     const config = {
         headers: {
@@ -40,14 +37,12 @@ export default function Home() {
             setData('transactions');
         })
         promise.catch((res) => {
-            console.log(res.message)
             navigate('/');
         })
 
     }
 
     function checkTransactions() {
-        console.log(transactions, total, transactions.length)
         if(transactions.length === 0) {
             return (
                 <Registry>
@@ -61,7 +56,10 @@ export default function Home() {
                 {
                     transactions.map((transaction, index) => {
                         return (
-                            <TransactionLi transaction={transaction} key={index}/>                       
+                            <TransactionLi 
+                                transaction={transaction} 
+                                key={index}
+                            />                       
                         )
                     })
                 }
@@ -71,7 +69,6 @@ export default function Home() {
     }
 
     function checkData(){
-        console.log(data)
         if(data === 'transactions') {
             return (
                 <Container>
@@ -81,7 +78,7 @@ export default function Home() {
                     </Header>
                     
                     <Main>
-                        { loading ? 'Carregando...' : checkTransactions() }
+                        { loading ? <ThreeDots color="#8C11BE" /> : checkTransactions() }
                         { !loading && transactions.length !== 0 ? <Total totalValue={parseFloat(total)}><h2>SALDO:</h2><p>R$ {parseFloat(total).toFixed(2).replace('.', ',')}</p></Total> : null }
                     </Main>
                     <Footer>
@@ -92,47 +89,42 @@ export default function Home() {
             )
         } else if (data === 'entrada') {
             return (
-                <Container>
-                    <Header>
-                        <h1>Nova Entrada</h1>
-                    </Header>
-                    <Form onSubmit={createCredit}>
-                        <input type="number" id="valor" value={transactionValue} placeholder="Valor" required onChange={(e) => setTransactionValue(e.target.value)}></input>
-                        <input type="text" id="descricao" value={transactionDescription} placeholder="Descrição" required onChange={(e) => setTransactionDescription(e.target.value)}></input>
-                        <button type="submit">Salvar entrada</button>
-                        <button onClick={() => {
-                            setData('transactions')
-                            setTransactionValue()
-                            setTransactionDescription('')
-                            }}>Cancelar</button>
-                    </Form>
-                    
-                </Container>   
+                <InputForm
+                    type={'Nova entrada'}
+                    createCredit={createCredit}
+                    transactionValue={transactionValue}
+                    setTransactionValue={setTransactionValue}
+                    transactionDescription={transactionDescription}
+                    setTransactionDescription={setTransactionDescription}
+                    loadingButton={loadingButton}
+                    disabled={disabled}
+                    submit={'Salvar entrada'}
+                    setData={setData}
+                /> 
             )
         } else if (data === 'saida') {
             return (
-                <Container>
-                    <Header>
-                        <h1>Nova Saída</h1>
-                    </Header>
-                    <Form onSubmit={createDebt}>
-                        <input type="number" id="valor" value={transactionValue} placeholder="Valor" required onChange={(e) => setTransactionValue(e.target.value)}></input>
-                        <input type="text" id="descricao" value={transactionDescription} placeholder="Descrição" required onChange={(e) => setTransactionDescription(e.target.value)}></input>
-                        <button type="submit">Salvar saida</button>
-                        <button onClick={() => {
-                            setData('transactions')
-                            setTransactionValue()
-                            setTransactionDescription('')
-                            }}>Cancelar</button>
-                    </Form>
-                    
-                </Container>   
+                <InputForm
+                    type={'Nova saída'}
+                    createCredit={createDebt}
+                    transactionValue={transactionValue}
+                    setTransactionValue={setTransactionValue}
+                    transactionDescription={transactionDescription}
+                    setTransactionDescription={setTransactionDescription}
+                    loadingButton={loadingButton}
+                    disabled={disabled}
+                    submit={'Salvar saída'}
+                    setData={setData}
+                />  
             )
         }
     }
 
     function createDebt(e) {
         e.preventDefault();
+        setDisabled(true);
+        setLoadingButton(true);
+
         const body = {
             value: parseFloat(transactionValue) * -1,
             description: transactionDescription
@@ -150,16 +142,22 @@ export default function Home() {
                 setTransactionDescription('');
                 setLoadTransactions(true);
                 setData('transactions');
-                console.log(res)
+                setDisabled(false);
+                setLoadingButton(false);
             })
             promise.catch((res) => {
-                console.log(`Erro: ${res.message}`)
+                setDisabled(false);
+                setLoadingButton(false);
+                console.error(`Erro: ${res.message}`)
             })
         }
     }
 
     function createCredit(e) {
         e.preventDefault();
+        setDisabled(true);
+        setLoadingButton(true);
+
         const body = {
             value: parseFloat(transactionValue),
             description: transactionDescription
@@ -176,10 +174,13 @@ export default function Home() {
                 setTransactionDescription('');
                 setLoadTransactions(true);
                 setData('transactions');
-                console.log(res)
+                setDisabled(false);
+                setLoadingButton(false);
             })
             promise.catch((res) => {
-                console.log(`Erro: ${res.message}`)
+                setDisabled(false);
+                setLoadingButton(false);
+                console.error(`Erro: ${res.message}`)
             })
         }
     }
@@ -190,25 +191,22 @@ export default function Home() {
                 Authorization: `Bearer ${token}`
             }
         };
-        console.log(config)
         let confirmation = window.confirm('Você tem certeza que deseja desconectar?');
-        if (confirmation) {
-            console.log(config)
+        if (confirmation) {   
             const promise = axios.delete('https://projeto13mywallet-back.herokuapp.com/session', config)
             promise.then((res) => {
-                console.log(res.data)
                 localStorage.removeItem('LastUser')
                 navigate('/');    
             })
             promise.catch((res) => {
-                console.log(`Erro: ${res.message}`)
+                console.error(`Erro: ${res.message}`)
             })
         }
     }
 
     return (
         <>
-        {checkData()}
+        { !data ? <Container><ThreeDots color="#FFFFFF" /></Container> : checkData()}
         </>
     )
 }
@@ -275,6 +273,12 @@ const Registry = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
+    p {
+        color: #868686;
+        font-size: 20px;
+        margin-bottom: 5px; 
+    }
 `
 
 const Footer = styled.footer`
@@ -371,33 +375,6 @@ const Form = styled.form`
         font-size: 20px;
         text-indent: 10px;
     }
-`
-const Li = styled.li`
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;    
-    
-    span {
-        font-family: 'Raleway', sans-serif;
-        font-size: 16px;
-        font-weight: 400;
-    }
-
-    div{
-        display: flex;
-        justify-content: space-between;
-    }
-`
-
-const TransactionDate = styled.p`
-    color: #C6C6C6;
-    margin-right: 10px;
-`
-
-const TransactionValue = styled.p`
-    font-size: 16px;
-    color: ${props => props.transaction > 0 ? '#03AC00' : '#C70000' };
-    margin-right: 10px;
 `
 
 const Total = styled.div`
