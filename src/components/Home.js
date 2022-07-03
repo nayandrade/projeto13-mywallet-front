@@ -10,7 +10,7 @@ import { IoRemoveCircleOutline } from "react-icons/io5";
 
 function TransactionLi ( { transaction } ) {    
     return (
-        <Li><div><TransactionDate>{transaction.date}</TransactionDate><span>{transaction.description}</span></div><TransactionValue transaction={transaction.value}>{parseFloat(transaction.value).toFixed(2).replace('.', ',')}</TransactionValue></Li>
+        <Li><div><TransactionDate>{transaction.date}</TransactionDate><span>{transaction.description}</span></div><TransactionValue transaction={transaction.value}>{parseFloat(transaction.value).toFixed(2).replace('.', ',').replace('-', '')}</TransactionValue></Li>
     )
 }
 
@@ -50,18 +50,22 @@ export default function Home() {
         console.log(transactions, total, transactions.length)
         if(transactions.length === 0) {
             return (
-                <>
-                    <li>Não há registros de</li>
-                    <li>entrada ou saída</li>
-                </>     
+                <Registry>
+                    <p>Não há registros de</p>
+                    <p>entrada ou saída</p>
+                </Registry>     
             )
         } else {
             return (
-                transactions.map((transaction, index) => {
-                    return (
-                        <TransactionLi transaction={transaction} key={index}/>                       
-                    )
-                })
+                <ul>
+                {
+                    transactions.map((transaction, index) => {
+                        return (
+                            <TransactionLi transaction={transaction} key={index}/>                       
+                        )
+                    })
+                }
+                </ul>
             )
         }
     }
@@ -73,13 +77,11 @@ export default function Home() {
                 <Container>
                     <Header>
                         <h1>Olá {name}</h1>
-                        <RiLogoutBoxRLine color="#FFFFFF" size="1.2em" />
+                        <RiLogoutBoxRLine onClick={logOut} color="#FFFFFF" size="1.2em" />
                     </Header>
                     
                     <Main>
-                        <ul>
-                            { loading ? 'Carregando...' : checkTransactions() }
-                        </ul>
+                        { loading ? 'Carregando...' : checkTransactions() }
                         { !loading && transactions.length !== 0 ? <Total totalValue={parseFloat(total)}><h2>SALDO:</h2><p>R$ {parseFloat(total).toFixed(2).replace('.', ',')}</p></Total> : null }
                     </Main>
                     <Footer>
@@ -181,6 +183,29 @@ export default function Home() {
             })
         }
     }
+
+    function logOut() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+        console.log(config)
+        let confirmation = window.confirm('Você tem certeza que deseja desconectar?');
+        if (confirmation) {
+            console.log(config)
+            const promise = axios.delete('https://projeto13mywallet-back.herokuapp.com/session', config)
+            promise.then((res) => {
+                console.log(res.data)
+                localStorage.removeItem('LastUser')
+                navigate('/');    
+            })
+            promise.catch((res) => {
+                console.log(`Erro: ${res.message}`)
+            })
+        }
+    }
+
     return (
         <>
         {checkData()}
@@ -235,13 +260,21 @@ const Main = styled.main`
     justify-content: space-between;
     padding: 24px;
 
-    div {
-        display: flex;
-        justify-content: space-between;
-    }
     ul {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
         overflow: auto;        
     }
+`
+
+const Registry = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 const Footer = styled.footer`

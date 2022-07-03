@@ -10,8 +10,34 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [loadingButton, setLoadingButton] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const { token, setToken, setName, name } = useContext(UserContext);
+    const { token, setToken, setName, name, userId, setUserId } = useContext(UserContext);
     const navigate = useNavigate();
+
+    if(localStorage.getItem('LastUser') !== null) {
+        let ourArray = JSON.parse(localStorage.getItem('LastUser'));
+        const { email, password } = ourArray;
+        const body = {
+            email: email,
+            password: password,
+        };
+        const promise = axios.post(
+            "https://projeto13mywallet-back.herokuapp.com/signin", body);
+
+        promise.then((res) => {
+            console.log(typeof body.password)
+            setToken(res.data.token);
+            setName(res.data.name);
+            setDisabled(false);
+            navigate('/home');
+            setLoadingButton(false);  
+        });
+        promise.catch((res) => {
+            console.log(typeof body.password)
+            console.log(res.message)
+            setDisabled(false);
+            setLoadingButton(false);  
+        });
+    }
 
     function UserLogin(event) {
         event.preventDefault();
@@ -29,9 +55,10 @@ export default function Login() {
         
 
         promise.then((res) => {
-            console.log(typeof body.password)
+            console.log(res)
             setToken(res.data.token);
             setName(res.data.name);
+            console.log(res.data.userId)
             setDisabled(false);
             localStorage.setItem('Login-Token', res.data.token);
             localStorage.setItem('LastUser',JSON.stringify(body));
