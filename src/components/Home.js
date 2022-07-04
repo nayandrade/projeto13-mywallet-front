@@ -206,7 +206,7 @@ export default function Home() {
 
     return (
         <>
-        { !data ? <Container><ThreeDots color="#FFFFFF" /></Container> : checkData()}
+        { transactions ? checkData() : <Container><ThreeDots color="#FFFFFF" /></Container>}
         </>
     )
 }
